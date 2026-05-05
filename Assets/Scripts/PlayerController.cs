@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody rb;
+    private int count;
     private float movementX;
     private float movementY;
     public float speed = 0;
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent <Rigidbody>();
+        count = 0;
     }
 
     void OnMove (InputValue movementValue)
@@ -27,5 +29,16 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = new Vector3 (movementX, 0.0f, movementY);
         rb.AddForce(movement * speed);
     }
+
+    void OnTriggerEnter(Collider other) 
+       {
+    // Check if the object the player collided with has the "PickUp" tag.
+        if (other.gameObject.CompareTag("PickUp")) 
+           {
+    // Deactivate the collided object (making it disappear).
+               other.gameObject.SetActive(false);
+               count = count + 1;
+           }
+       }
 
 }
