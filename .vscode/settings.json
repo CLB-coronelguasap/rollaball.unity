@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "unity or something.sln"
+    "dotnet.defaultSolution": "rollaball.unity.sln"
 }
