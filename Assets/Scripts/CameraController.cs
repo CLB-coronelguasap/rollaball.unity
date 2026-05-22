@@ -1,20 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
-    public Transform player; // Drag your ball player here
-    public Vector3 offset = new Vector3(0, 5, -10); // Adjust for height and distance
-    public float smoothness = 5f;
+ // Reference to the player GameObject.
+ public GameObject player;
 
-    void LateUpdate()
+ // The distance between the camera and the player.
+ private Vector3 offset;
+
+ // Start is called before the first frame update.
+ void Start()
     {
-        // Calculate the desired position based on the ball's position + a fixed offset
-        Vector3 targetPosition = player.position + offset;
-        
-        // Smoothly move the camera to that position
-        transform.position = Vector3.Lerp(transform.position, targetPosition, smoothness * Time.deltaTime);
+ // Calculate the initial offset between the camera's position and the player's position.
+        offset = transform.position - player.transform.position; 
+    }
 
-        // Optional: Keep the camera looking at the ball
-        transform.LookAt(player.position);
+ // LateUpdate is called once per frame after all Update functions have been completed.
+ void LateUpdate()
+    {
+ // Maintain the same offset between the camera and player throughout the game.
+        transform.position = player.transform.position + offset;  
     }
 }
