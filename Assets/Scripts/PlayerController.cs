@@ -14,16 +14,17 @@ public class PlayerController : MonoBehaviour
     public float speed = 0;
     public TextMeshProUGUI countText;
     public GameObject winTextObject;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public Camera playerCamera; // drag your camera in here
+
     void Start()
     {
-        rb = GetComponent <Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         count = 0;
         SetCountText();
         winTextObject.SetActive(false);
     }
 
-    void OnMove (InputValue movementValue)
+    void OnMove(InputValue movementValue)
     {
         Vector2 movementVector = movementValue.Get<Vector2>();
         movementX = movementVector.x;
@@ -39,33 +40,46 @@ public class PlayerController : MonoBehaviour
             Destroy(GameObject.FindGameObjectWithTag("Enemy"));
         }
     }
+
     void FixedUpdate()
     {
-        Vector3 movement = new Vector3 (movementX, 0.0f, movementY);
+        // get camera's forward and right but flatten them so vertical tilt doesn't affect movement
+        Vector3 camForward = playerCamera.transform.forward;
+        Vector3 camRight = playerCamera.transform.right;
+        camForward.y = 0f;
+        camRight.y = 0f;
+        camForward.Normalize();
+        camRight.Normalize();
+
+        Vector3 movement = (camForward * movementY) + (camRight * movementX);
         rb.AddForce(movement * speed);
     }
 
-    void OnTriggerEnter(Collider other) 
-       {
-    // Check if the object the player collided with has the "PickUp" tag.
-        if (other.gameObject.CompareTag("PickUp")) 
-           {
-    // Deactivate the collided object (making it disappear).
-               other.gameObject.SetActive(false);
-               count = count + 1;
-               SetCountText();
-           }
-       }
-
-    private void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
-       if (collision.gameObject.CompareTag("Enemy"))
-       {
-           // Destroy the current object
-           Destroy(gameObject); 
-           // Update the winText to display "You Lose!"
-           winTextObject.gameObject.SetActive(true);
-           winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
-       }
+        if (other.gameObject.CompareTag("PickUp"))
+        {
+            other.gameObject.SetActive(false);
+            count = count + 1;
+            SetCountText();
+        }
+    }
+
+    private void OnCollisionEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+            winTextObject.gameObject.SetActive(true);
+            winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
+        }
+
+        if (other.gameObject.CompareTag("Finish"))
+        {
+            winTextObject.SetActive(true);
+            winTextObject.GetComponent<TextMeshProUGUI>().text = "You Win!";
+            rb.linearVelocity = Vector3.zero;
+            rb.isKinematic = true;
+        }
     }
 }
