@@ -259831,37 +259831,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1886599556}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &757011918
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 757011919}
-  m_Layer: 0
-  m_Name: 'NOTE: ADD TAG "Finish" AND ADD IT TO THE CUBE ABOVE'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &757011919
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 757011918}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.145118, y: -47.011723, z: -3.0227962}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &768366592
 GameObject:
   m_ObjectHideFlags: 0
@@ -269165,6 +269134,7 @@ MonoBehaviour:
   countText: {fileID: 1867049814}
   winTextObject: {fileID: 405026681}
   playerCamera: {fileID: 961739752}
+  jump: {x: 0, y: 0, z: 0}
 --- !u!114 &925209552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431839,4 +431809,3 @@ SceneRoots:
   - {fileID: 891342032}
   - {fileID: 772714313}
   - {fileID: 1394206009}
-  - {fileID: 757011919}

@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public Camera playerCamera; // drag your camera in here
     private int collectibleAmount;
     private bool isGrounded;
+    public Vector3 jump;
 
     void Start()
     {
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
         SetCountText();
         winTextObject.SetActive(false);
         collectibleAmount = GameObject.FindGameObjectsWithTag("PickUp").Length;
+        jump = new Vector3(0.0f, jumpForce, 0.0f);
     }
 
     void OnMove(InputValue movementValue)
@@ -44,7 +46,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded);
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rb.AddForce(jump * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
         }
     }
 
@@ -53,10 +56,6 @@ public class PlayerController : MonoBehaviour
         isGrounded = true;
     }
 
-    
-    void OnCollisionExit() {
-        isGrounded = false;
-    }
     void FixedUpdate()
     {
         // get camera's forward and right but flatten them so vertical tilt doesn't affect movement
@@ -81,7 +80,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
@@ -98,7 +97,7 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = Vector3.zero;
             rb.isKinematic = true;
         }
-        else if (other.gameObject.CompareTag("finish") && count != collectibleAmount)
+        else if (other.gameObject.CompareTag("finish") && count <= collectibleAmount)
         {
             winTextObject.SetActive(true);
             winTextObject.GetComponent<TextMeshProUGUI>().text = "You Win! But You Didn't Collect Everything!";
