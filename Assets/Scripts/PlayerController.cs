@@ -8,6 +8,7 @@ using TMPro;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody rb;
+    public float jumpForce;
     private int count;
     private float movementX;
     private float movementY;
@@ -15,6 +16,8 @@ public class PlayerController : MonoBehaviour
     public TextMeshProUGUI countText;
     public GameObject winTextObject;
     public Camera playerCamera; // drag your camera in here
+    private int collectibleAmount;
+    private bool isGrounded;
 
     void Start()
     {
@@ -22,6 +25,7 @@ public class PlayerController : MonoBehaviour
         count = 0;
         SetCountText();
         winTextObject.SetActive(false);
+        collectibleAmount = GameObject.FindGameObjectsWithTag("PickUp").Length;
     }
 
     void OnMove(InputValue movementValue)
@@ -34,13 +38,25 @@ public class PlayerController : MonoBehaviour
     void SetCountText()
     {
         countText.text = "Count: " + count.ToString();
-        if (count >= 15)
+    }
+
+    void Update() 
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded);
         {
-            winTextObject.SetActive(true);
-            Destroy(GameObject.FindGameObjectWithTag("Enemy"));
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
 
+
+    void OnCollisionStay() {
+        isGrounded = true;
+    }
+
+    
+    void OnCollisionExit() {
+        isGrounded = false;
+    }
     void FixedUpdate()
     {
         // get camera's forward and right but flatten them so vertical tilt doesn't affect movement
@@ -74,10 +90,27 @@ public class PlayerController : MonoBehaviour
             winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
         }
 
-        if (other.gameObject.CompareTag("Finish"))
+        if (other.gameObject.CompareTag("finish") && count >= collectibleAmount)
         {
             winTextObject.SetActive(true);
-            winTextObject.GetComponent<TextMeshProUGUI>().text = "You Win!";
+            winTextObject.GetComponent<TextMeshProUGUI>().text = "You Win! All Collectibles Collected!";
+            Destroy(GameObject.FindGameObjectWithTag("Enemy"));
+            rb.linearVelocity = Vector3.zero;
+            rb.isKinematic = true;
+        }
+        else if (other.gameObject.CompareTag("finish") && count != collectibleAmount)
+        {
+            winTextObject.SetActive(true);
+            winTextObject.GetComponent<TextMeshProUGUI>().text = "You Win! But You Didn't Collect Everything!";
+            Destroy(GameObject.FindGameObjectWithTag("Enemy"));
+            rb.linearVelocity = Vector3.zero;
+            rb.isKinematic = true;
+        }
+        else if (other.gameObject.CompareTag("finish") && count == 0)
+        {
+            winTextObject.SetActive(true);
+            winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose! How did you not collect anything?";
+            Destroy(GameObject.FindGameObjectWithTag("Enemy"));
             rb.linearVelocity = Vector3.zero;
             rb.isKinematic = true;
         }
