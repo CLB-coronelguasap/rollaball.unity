@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     public float speed = 0;
     public TextMeshProUGUI countText;
     public GameObject winTextObject;
-    public Camera playerCamera; // drag your camera in here
+    public Camera playerCamera; 
     private int collectibleAmount;
     private bool isGrounded;
     public Vector3 jump;
@@ -78,17 +78,7 @@ public class PlayerController : MonoBehaviour
             count = count + 1;
             SetCountText();
         }
-    }
-
-    private void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.CompareTag("Enemy"))
-        {
-            Destroy(gameObject);
-            winTextObject.gameObject.SetActive(true);
-            winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
-        }
-
+        
         if (other.gameObject.CompareTag("finish") && count >= collectibleAmount)
         {
             winTextObject.SetActive(true);
@@ -112,6 +102,16 @@ public class PlayerController : MonoBehaviour
             Destroy(GameObject.FindGameObjectWithTag("Enemy"));
             rb.linearVelocity = Vector3.zero;
             rb.isKinematic = true;
+        }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+            winTextObject.gameObject.SetActive(true);
+            winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
         }
     }
 }
