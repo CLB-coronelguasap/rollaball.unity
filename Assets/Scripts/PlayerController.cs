@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     private int collectibleAmount;
     private bool isGrounded;
     public Vector3 jump;
+    public GameObject restartbutton;
 
     void Start()
     {
@@ -28,6 +30,11 @@ public class PlayerController : MonoBehaviour
         winTextObject.SetActive(false);
         collectibleAmount = GameObject.FindGameObjectsWithTag("PickUp").Length;
         jump = new Vector3(0.0f, jumpForce, 0.0f);
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     void OnMove(InputValue movementValue)
@@ -112,6 +119,7 @@ public class PlayerController : MonoBehaviour
             Destroy(gameObject);
             winTextObject.gameObject.SetActive(true);
             winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
+            restartbutton.SetActive(true);
         }
     }
 }
