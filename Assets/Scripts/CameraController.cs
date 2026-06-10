@@ -2,18 +2,22 @@ using UnityEngine;
 
 public class BallCamera : MonoBehaviour
 {
+    // Get transform component of ball
     public Transform ball;
+    // Tweakable variables
     public float height = 5f;
     public float distance = 5f;
     public float rotationSpeed = 5f;
     public float collisionRadius = 0.3f;
     public float cameraAngle = 20f;
+    // Get collision mask of the camera
     public LayerMask collisionMask;
-
+    // Get rigidbody component of ball
     private Rigidbody ballRb;
+    // Make a quaternion to use as the rotation
     private Quaternion targetRotation;
 
-    void Start()
+    void Start() // Run at the start of program execution
     {
         ballRb = ball.GetComponent<Rigidbody>();
         targetRotation = transform.rotation;
